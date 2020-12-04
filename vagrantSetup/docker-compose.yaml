@@ -1,23 +1,5 @@
 version: '2.2'
 services:
-  elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:6.8.13
-    container_name: elasticsearch
-    environment:
-      - cluster.name=docker-cluster
-      - bootstrap.memory_lock=true
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
-    volumes:
-      - esdata1:/usr/share/elasticsearch/data
-    ports:
-      - 9200:9200
-    networks:
-      - ela_redis_net
-      
   redis:
     container_name: redis
     hostname: redis
@@ -27,7 +9,7 @@ services:
     ports:
       - "6379:6379"
     networks:
-      - ela_redis_net
+      - redis_net
 
   redis-commander:
     container_name: redis-commander
@@ -40,11 +22,11 @@ services:
     ports:
     - "8081:8081"
     networks:
-      - ela_redis_net
+      - redis_net
 
 volumes:
-  esdata1:
+  redisdata:
     driver: local
 
 networks:
-  ela_redis_net:
+  redis_net:
