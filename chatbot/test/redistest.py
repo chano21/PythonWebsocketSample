@@ -1,7 +1,6 @@
 import unittest
 import configparser
 import redis
-import time
 redisconfig='REDIS_SERVER'
 filedir = '../configs/redis_config.ini'
 

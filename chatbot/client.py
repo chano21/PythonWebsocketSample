@@ -1,13 +1,9 @@
-#from redismanager import RedisManager
-import json
-import uuid
-import configparser
-import redis
-import gevent.pool
-import time
-from gevent.pywsgi import WSGIServer
-from geventwebsocket.handler import WebSocketHandler
-from geventwebsocket.resource import Resource, WebSocketApplication
+import gevent
+from gevent import monkey
+monkey.patch_all()
+
+from websocket import create_connection
+ws = create_connection("ws://echo.websocket.org")
 
 pool = gevent.pool.Pool(1000)
 

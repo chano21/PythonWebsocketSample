@@ -9,9 +9,6 @@ from gevent.pywsgi import WSGIServer
 from geventwebsocket.handler import WebSocketHandler
 from geventwebsocket.resource import Resource, WebSocketApplication
 
-pool = gevent.pool.Pool(1000)
-
-publishs=[]    
 
 class RedisConnector():
     
@@ -49,13 +46,7 @@ class MemoryBroker():
     
     def publish(self, key, data):
         for socket in self.sockets[key]:
- #           redistool.rc.publish(key,data)
- #           messages=redistool.pubsub.get_message()
- #           data = messages['data'];
             socket.on_broadcast(data)
-            publishs.append(pool.spawn(socket.on_broadcast(data)))
-        gevent.joinall(publishs)
-  
             
         
     def unsubscribe(self, key, socket):
