@@ -15,13 +15,18 @@ class RedisPubSubTest(unittest.TestCase):
         r = redis.StrictRedis(host=host,port=port, db=0, encoding='utf-8',decode_responses=True)
         ps = r.pubsub()
         ps.subscribe('room1')
-        r.publish('room1',"hello world")
-        ps.get_message()
+        r.publish('room1',"hello world1")
+        r.publish('room1',"hello world2")
+        r.publish('room1',"hello world3")
+     #   ps.get_message()
+        #messages=ps.get_message().get('message')
+        #print(messages)
         messages=ps.get_message()
-        ps.get_message()
+        print(messages)
+        messages=ps.get_message()
+        print(messages)
+        
         data = messages['data'];
         print(data) 
-        print(data) 
-
 if __name__ == '__main__':
     unittest.main()
