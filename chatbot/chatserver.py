@@ -2,17 +2,12 @@ import json
 import uuid
 import configparser
 import redis
-import gevent.pool
 import time
 from gevent.pywsgi import WSGIServer
 from geventwebsocket.handler import WebSocketHandler
 from geventwebsocket.resource import Resource, WebSocketApplication
 
-pool = gevent.pool.Pool(1000)
-
-publishs=[]    
-
-
+#레디스 연결하는 정보를 담은 클래스
 class RedisConnector():
     
     def __init__(self):
@@ -22,8 +17,7 @@ class RedisConnector():
     def redisConnection(self):
         config = configparser.ConfigParser()
         config.read(self.filedir)
-        print(self.redisconfig)
-        password = config[self.redisconfig]['REQUIREPASS']
+    #    password = config[self.redisconfig]['REQUIREPASS']
         host = config[self.redisconfig]['HOST']
         port = config[self.redisconfig]['PORT']
       
@@ -59,11 +53,9 @@ class Broker():
                 break
        
         
-         
         for socket in self.sockets[key]:
-            publishs.append(pool.spawn(socket.on_broadcast(message)))
-        gevent.joinall(publishs)
-  
+            socket.on_broadcast(message)
+         
             
         
     def unsubscribe(self, key, socket):
@@ -94,7 +86,6 @@ class Chat(WebSocketApplication):
         data = json.loads(message)
         data['user'] = self.userid.hex
         serial=json.dumps(data, ensure_ascii=False).encode('utf-8')
-
         redistool.redisConnection().publish('room1',serial)
         broker.publish('room1', data)
 
@@ -118,7 +109,6 @@ application = Resource([
     ('^/chat', Chat),
     ('^/', index)
 ])
-
 
 if __name__ == '__main__':
     WSGIServer('{}:{}'.format('0.0.0.0', 8000), application, handler_class=WebSocketHandler).serve_forever()
