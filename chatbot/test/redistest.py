@@ -9,7 +9,6 @@ class RedisPubSubTest(unittest.TestCase):
     def testRedisClient(self):
         config = configparser.ConfigParser()
         config.read(filedir)
-        password = config[redisconfig]['REQUIREPASS']
         host = config[redisconfig]['HOST']
         port = config[redisconfig]['PORT']
         r = redis.StrictRedis(host=host,port=port, db=0, encoding='utf-8',decode_responses=True)
@@ -18,9 +17,8 @@ class RedisPubSubTest(unittest.TestCase):
         r.publish('room1',"hello world1")
         r.publish('room1',"hello world2")
         r.publish('room1',"hello world3")
-     #   ps.get_message()
-        #messages=ps.get_message().get('message')
-        #print(messages)
+        while(ps.get_message()==1):
+            pass
         messages=ps.get_message()
         print(messages)
         messages=ps.get_message()
