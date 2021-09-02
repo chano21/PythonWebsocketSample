@@ -1,4 +1,4 @@
-# TravlePlaneAssignment
+# PythonWebsocketSample
 Assignment for TravlePlane
 
 install and excute guide
