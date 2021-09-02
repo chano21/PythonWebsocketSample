@@ -1,5 +1,4 @@
 # PythonWebsocketSample
-Assignment for TravlePlane
 
 install and excute guide
 실행초기순서 :
